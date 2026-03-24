@@ -92,7 +92,7 @@ Run both services with Docker Compose:
 
 Then open:
 
-- Web: `http://localhost:5173`
+- Web: `http://localhost:4173`
 - API health: `http://localhost:5012/health`
 
 ## Test instructions

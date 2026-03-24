@@ -17,4 +17,4 @@ services:
     depends_on:
       - api
     ports:
-      - "4173:4173"
+      - "4173:80"

@@ -1,0 +1,19 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# Node modules and frontend outputs
+**/node_modules/
+**/dist/
+**/dist-ssr/
+
+# Local env/config
+.env
+.env.*
+*.local
+
+# Editor/system files
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json

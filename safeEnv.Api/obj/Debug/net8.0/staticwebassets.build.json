@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "MkWDSOug+GRtEd+TbqJZbxhlyyFeFeYvZkdXdWhQfz8=",
+  "Source": "safeEnv.Api",
+  "BasePath": "_content/safeEnv.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

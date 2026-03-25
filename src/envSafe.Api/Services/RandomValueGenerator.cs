@@ -16,16 +16,24 @@ public sealed class RandomValueGenerator : IRandomValueGenerator
     private const string MaxEntropySymbols = "!@%^*()-_=+[]{}|,./?:~";
     private const string UrlSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~";
     private const string ConnectionSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.";
+    private const string SimilarCharacters = "O0Il1";
+    private const string AmbiguousCharacters = "O0Il1|`'\"";
 
     public string Generate(GenerationOptions options)
     {
         var charset = GetCharacterSet(options.Mode, options.ValueType);
+        charset = ApplyAdvancedFiltering(charset, options);
+        if (string.IsNullOrEmpty(charset))
+        {
+            charset = Alphanumeric;
+        }
+
         return GenerateFromCharset(charset, options.Length);
     }
 
     private static string GetCharacterSet(GenerationMode mode, SecretValueType valueType)
     {
-        return valueType switch
+        var baseCharset = valueType switch
         {
             SecretValueType.UrlSafeString => UrlSafe,
             SecretValueType.ConnectionStringSafeValue => ConnectionSafe,
@@ -37,6 +45,35 @@ public sealed class RandomValueGenerator : IRandomValueGenerator
                 _ => Alphanumeric
             }
         };
+
+        return baseCharset;
+    }
+
+    private static string ApplyAdvancedFiltering(string charset, GenerationOptions options)
+    {
+        var working = charset;
+
+        if (options.ExcludeSimilarCharacters)
+        {
+            working = new string(working.Where(ch => !SimilarCharacters.Contains(ch)).ToArray());
+        }
+
+        if (options.ExcludeAmbiguousCharacters)
+        {
+            working = new string(working.Where(ch => !AmbiguousCharacters.Contains(ch)).ToArray());
+        }
+
+        switch (options.CharacterCaseMode)
+        {
+            case CharacterCaseMode.LowercaseOnly:
+                working = new string(working.Where(ch => !char.IsLetter(ch) || char.IsLower(ch)).ToArray());
+                break;
+            case CharacterCaseMode.UppercaseOnly:
+                working = new string(working.Where(ch => !char.IsLetter(ch) || char.IsUpper(ch)).ToArray());
+                break;
+        }
+
+        return working;
     }
 
     private static string GenerateFromCharset(string charset, int length)

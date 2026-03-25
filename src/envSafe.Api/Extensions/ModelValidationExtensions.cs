@@ -29,6 +29,13 @@ public static class ModelValidationExtensions
             return false;
         }
 
+        if (request.Advanced is not null &&
+            !Enum.IsDefined(request.Advanced.CharacterCaseMode))
+        {
+            error = "advanced.characterCaseMode is invalid.";
+            return false;
+        }
+
         error = string.Empty;
         return true;
     }

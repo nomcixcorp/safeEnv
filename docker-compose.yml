@@ -1,0 +1,20 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./src/envSafe.Api/Dockerfile
+    container_name: envsafe_api
+    ports:
+      - "5012:8080"
+
+  web:
+    build:
+      context: .
+      dockerfile: ./src/envSafe.Web/Dockerfile
+      args:
+        VITE_API_URL: http://api:8080
+    container_name: envsafe_web
+    depends_on:
+      - api
+    ports:
+      - "4173:80"

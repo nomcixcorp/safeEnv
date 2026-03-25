@@ -33,6 +33,21 @@ public sealed class GenerateRequest
 
     [Range(8, 256)]
     public int Length { get; init; } = 32;
+
+    public GenerationAdvancedOptions? Advanced { get; init; }
+}
+
+public sealed record GenerationAdvancedOptions(
+    bool ExcludeSimilarCharacters = false,
+    bool ExcludeAmbiguousCharacters = false,
+    CharacterCaseMode CharacterCaseMode = CharacterCaseMode.Mixed);
+
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum CharacterCaseMode
+{
+    Mixed,
+    LowercaseOnly,
+    UppercaseOnly
 }
 
 public sealed record GenerateResponse(

@@ -34,7 +34,11 @@ public sealed class ApiEndpointsTests : IClassFixture<WebApplicationFactory<Prog
             VariableName = "API_TOKEN",
             ValueType = SecretValueType.Token,
             Mode = GenerationMode.Balanced,
-            Length = 24
+            Length = 24,
+            Advanced = new GenerationAdvancedOptions(
+                ExcludeSimilarCharacters: false,
+                ExcludeAmbiguousCharacters: true,
+                CharacterCaseMode: CharacterCaseMode.Mixed)
         };
 
         var response = await _client.PostAsJsonAsync("/api/generate", request);
@@ -43,6 +47,7 @@ public sealed class ApiEndpointsTests : IClassFixture<WebApplicationFactory<Prog
         var payload = await response.Content.ReadFromJsonAsync<GenerateResponse>();
         Assert.NotNull(payload);
         Assert.Equal(3, payload!.Candidates.Count);
+        Assert.DoesNotContain(payload.Candidates.Select(candidate => candidate.RawValue).SelectMany(value => value), ch => ch is '0' or 'O' or '1' or 'l' or 'I');
     }
 
     [Fact]
